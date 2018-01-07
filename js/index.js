@@ -1,4 +1,5 @@
-var viewport
+var viewport, projects
+
 
 /**
  * Initialize the 3D viewport.
@@ -10,6 +11,25 @@ function initViewport() {
   viewport.setupDefaultLighting()
   // set the viewport background to white
   viewport.setClearColor(0xffffff)
+}
+
+/**
+ * Fetch the user's projects from Flux.
+ */
+function fetchProjects() {
+  // get the user's projects from flux (returns a promise)
+  getProjects().then(function(data) {
+    projects = data.entities
+    // for each project, create an option for the select box with
+    // the project.id as the value and the project.name as the label
+    var options = projects.map(function(project) {
+      return $('<option>').val(project.id).text(project.name)
+    })
+    // insert the default text as the first option
+    options.unshift('<option>Please select a project</option>')
+    // make sure the select box is empty and then insert the new options
+    $('select.project').empty().append(options)
+  })
 }
 
 /**
@@ -52,6 +72,8 @@ function init() {
         initViewport()
         //manually set the viewport's geometry to box_data
         viewport.setGeometryEntity(box_data)
+        // get the user's projects from Flux
+        fetchProjects()
       } else {
         showLogin();
       }
