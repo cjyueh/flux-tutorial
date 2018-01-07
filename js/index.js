@@ -1,3 +1,17 @@
+var viewport
+
+/**
+ * Initialize the 3D viewport.
+ */
+function initViewport() {
+  // attach the viewport to the #div view
+  viewport = new FluxViewport(document.querySelector("#view"))
+  // set up default lighting for the viewport
+  viewport.setupDefaultLighting()
+  // set the viewport background to white
+  viewport.setClearColor(0xffffff)
+}
+
 /**
  * Hide the login page and attach events to the logout button.
  */
@@ -34,6 +48,10 @@ function init() {
         // if logged in, make sure the login page is hidden
         hideLogin()
         // alert('You\'re logged in!')
+        // create the viewport
+        initViewport()
+        //manually set the viewport's geometry to box_data
+        viewport.setGeometryEntity(box_data)
       } else {
         showLogin();
       }
