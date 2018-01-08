@@ -53,6 +53,27 @@ function updateCellValue(project, cell, value) {
 }
 
 /**
+ * Creates a websocket for a project that listens for data table events, and calls
+ * the supplied handler function
+ */
+function createWebSocket(project, notificationHandler){
+  var dataTable = getDataTable(project)
+  var options = {
+    onOpen: function() { console.log('Websocket opened.') },
+    onError: function() { console.log('Websocket error.') }
+  }
+  // if this data table doesn't have websockets open
+  if (!dataTable.websocketOpen) {
+    dataTable.websocketOpen = true
+    // open them
+    dataTable.table.openWebSocket(options)
+    // and attach the handler we created above
+    if(notificationHandler)
+      dataTable.table.addWebSocketHandler(notificationHandler)
+  }
+}
+
+/**
  * Get the Flux user.
  */
 function getUser() {

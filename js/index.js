@@ -24,6 +24,7 @@ function fetchProjects() {
     var options = projects.map(function(project) {
       return $('<option>').val(project.id).text(project.name)
     })
+
     // insert the default text as the first option
     options.unshift('<option>Please select a project</option>')
     // make sure the select box is empty and then insert the new options
@@ -35,7 +36,16 @@ function fetchProjects() {
       // find the project that was clicked on, and assign it to the global
       // variable 'selectedProject'
       selectedProject = projects.filter(function(p) { return p.id === e.target.value })[0]
-// now go fetch the project's cells (keys)
+      var c = $('#console')
+      c.val('')
+      var notificationHandler = function(msg) {
+        //write all events to the app console
+        c.val(c.val() + msg.type + ': \'' + msg.body.label + '\'\n')
+      }
+
+      //listens and responds to changes on flux using our handler
+      createWebSocket(selectedProject, notificationHandler)
+      // now go fetch the project's cells (keys)
       fetchCells()
     })
   })
