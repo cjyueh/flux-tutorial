@@ -52,6 +52,17 @@ function updateCellValue(project, cell, value) {
   return cell.update({value: value})
 }
 
+var notificationHandler = function(msg) {
+  //write all events to the app console
+  c.val(c.val() + msg.type + ': \'' + msg.body.label + '\'\n')
+  if (msg.type === "CELL_MODIFIED") {
+    //only render when the modification involves the selected output
+    if(selectedOutputCell && (selectedOutputCell.id === msg.body.id)) {
+      getValue(selectedProject, selectedOutputCell).then(render)
+    }
+  }
+}
+
 /**
  * Creates a websocket for a project that listens for data table events, and calls
  * the supplied handler function
