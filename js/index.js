@@ -146,6 +146,30 @@ function initCells() {
       })
     }
   })
+
+  // attach a function to the change event of the slider's (input) select box
+  $('#input select.cell').on('change', function(e) {
+    // find the cell that was clicked on
+    var selectedCell = projectCells.filter(function(k) { return k.id === e.target.value })[0]
+    // and attach it to the slider so we can grab it later
+    $('#input input').data('cell', selectedCell)
+  })
+
+  // attach a function to the change event of the slider
+  $('#input input').on('change', function(e) {
+    // find the cell that was clicked on (we attached it in the previous function)
+    var cell = $(e.target).data('cell')
+    // update the display with the new value
+    $('#input .label .value').html(e.target.value)
+    // and if we have a cell
+    if (cell) {
+      // tell flux to update the cell with this new value
+      updateCellValue(selectedProject, cell, parseFloat(e.target.value))
+    }
+  })
+
+  // initialize the slider's displayed value
+  $('#input .label .value').html($('#input input').val())
 }
 
 /**

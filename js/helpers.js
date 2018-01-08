@@ -37,6 +37,14 @@ function getValue(project, cell) {
 }
 
 /**
+ * Update the value in a project cell (key).
+ */
+function updateCellValue(project, cell, value) {
+  var cell = getUser().getCell(project.id, cell.id)
+  return cell.update({value: value})
+}
+
+/**
  * Get the Flux user.
  */
 function getUser() {
