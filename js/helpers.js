@@ -37,6 +37,14 @@ function getValue(project, cell) {
 }
 
 /**
+ * Create a project cell (key) in Flux.
+ */
+function createCell(project, name) {
+  var dt = getDataTable(project).table
+  return dt.createCell(name, {description: name, value: ''})
+}
+
+/**
  * Update the value in a project cell (key).
  */
 function updateCellValue(project, cell, value) {

@@ -173,6 +173,29 @@ function initCells() {
 }
 
 /**
+ * Initialize the create cell (key) input + button.
+ */
+function initCreate() {
+  $('#create .button').on('click', function(e) {
+    // get the input field
+    var input = $(e.target).parent().find('input')
+    // get the input field value
+    var value = input.val()
+    // check we have a name
+    if (value === '') return
+    // check we have a project selected
+    if (!selectedProject) return
+    // create the cell (key)
+    createCell(selectedProject, value).then(function() {
+      // clear the input
+      input.val('')
+      // refresh the cell (key) select boxes
+      fetchCells()
+    })
+  })
+}
+
+/**
  * Start the application.
  */
 function init() {
@@ -193,6 +216,8 @@ function init() {
         fetchProjects()
         // prepare the cell (key) select boxes
         initCells()
+        // prepare the create key input + button
+        initCreate()
       } else {
         showLogin();
       }
