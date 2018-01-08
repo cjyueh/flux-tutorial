@@ -64,14 +64,45 @@ function fetchCells() {
 }
 
 function render(data) {
-  if(!data){
-    //clear the viewport when there is no data
-    viewport.setGeometryEntity(null)
+  //check to see if data is available to render
+  if (!data) {
+    //empty the display and hide the geometry viewport
+    $('#display .content').empty()
+    $('#display').show()
+    $('#geometry').hide()
   }
-  //check to see if the data is recognized as geometry
+
+  //check to see if the data is a known type of geometry
   else if (FluxViewport.isKnownGeom(data.value)) {
     //add it to the viewport
     viewport.setGeometryEntity(data.value)
+    //swap the display types
+    $('#geometry').show()
+    $('#display').hide()
+  } else {
+    // not geometry, so figure out how to best render the type
+    // check if the value is a number
+    var d = parseFloat(data.value)
+    // otherwise make it into a string
+    if (isNaN(d)) d = JSON.stringify(data.value)
+    else d = d + ''
+    // calculate the approximate display size for the text
+    // based on the ammount of content (length)
+    var size = Math.max((1/Math.ceil(d.length/20)) * 3, 0.8)
+    // apply the new text size to the content
+    $('#display .content').html(d).css('font-size', size+'em')
+    // if the content is json
+    if (d[0] === '[' || d[0] === '{') {
+      // align left
+      $('#display .content').css('text-align', 'left')
+    } else {
+      // align center
+      $('#display .content').css('text-align', 'center')
+    }
+
+    //swap the display types
+    $('#geometry').hide()
+    $('#display').show()
   }
 }
 
